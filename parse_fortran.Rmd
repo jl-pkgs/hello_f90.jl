@@ -1,0 +1,33 @@
+```{r}
+library(Ipaper)
+
+get_fn_name <- function(x) {
+  str_extract(x, "(?<=FUNCTION )\\S*")
+}
+
+parse_fn <- function(f, prefix = "!!!", subfix = "END FUNCTION") {
+  all = readLines(f) %>% paste(collapse = "/n")
+  
+  pattern = glue("(?<={prefix})(.*?)(?={subfix})")
+  fns = str_extract_all(all, "(?<=!!!)(.*?)(?=END FUNCTION)")[[1]]
+  fns
+}
+
+write_fn <- function(fns, outdir="src") {
+  .tmp = foreach(fn = fns, i = icount()) %do% {
+    txt = str_replace_all(fn, c("/n" = "\n", "\n  " = "\n")) %>% 
+      paste0(prefix, ., subfix)
+    name = get_fn_name(fn) 
+    fout = glue("{outdir}/{name}.f90") %>% as.character()
+    writeLines(txt, fout)
+  }
+}
+```
+
+```{r}
+f = "z:/DATA/China/ChinaMet_hourly_mete2000/ChinaHI_hourly.R/theta/src/mod_diag_functions.f90"
+fns = parse_fn(f)
+write_fn(fns)
+```
+
+
