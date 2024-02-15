@@ -1,4 +1,6 @@
-lib = ("./mod_diag_functions.so")
+# lib = ("./mod_diag_functions.so")
+lib = ("./build/libhello.so")
+# lib = ("./build/libhello.a") # not work
 
 FT=Float64
 
@@ -64,5 +66,5 @@ theta_se(20 +K0, 1000.0, 20.0, 0.002884103) - K0
 # atm = 1000.0 #* 100.0 # hPa
 # theta(20 + K0, atm)  - K0
 
-cal_Tdew(20., 80.)
-cal_es(tK)
+@show cal_Tdew(20., 80.)
+@show cal_es(tK)
